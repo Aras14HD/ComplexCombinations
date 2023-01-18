@@ -22,6 +22,6 @@ jobs:
       uses: actions/upload-artifact@v3.1.2
       with:
         name: build
-        path: ComplexCombinations
+        path: target/debug/ComplexCombinations
     - name: Run tests
       run: cargo test --verbose
