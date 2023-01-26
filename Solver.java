@@ -47,7 +47,7 @@ public class Solver {
                     copy.remove(i);
                 }
                 diff = i == arr.size() - 1 ? arr.get(i) : arr.get(i) - arr.get(i + 1);
-                System.out.println(diff);
+                //System.out.println(diff);
                 if (diff > 0) {
                     out += diff * this.solve(copy);
                 }
