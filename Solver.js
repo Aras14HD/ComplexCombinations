@@ -1,13 +1,20 @@
-let solve = (arr) => {
-  if (arr == [1])
+let cache = {}
+let solve = arr => {
+  //console.log(arr)
+  let key = JSON.stringify(arr);
+  if (cache[key]) {
+    //console.log("Cached!")
+    return cache[key]
+  }
+  if (arr.length == 1 && arr[0] == 1) {
     return 1;
+  }
   let out = 0;
   for (let i = 0; i < arr.length; i++) {
     if (arr[i] != 0) {
       let diff = 0;
-      let copy = [] + arr;
-      copy[i]--;
-      console.log(copy[i])
+      let copy = [...arr];
+      copy.splice(i, 1, copy[i]-1);
       while (copy[copy.length-1] == 0) {
         copy.pop()
       }
@@ -23,6 +30,7 @@ let solve = (arr) => {
       return 0
     }
   }
+  cache[key] = out
   return out
 }
 
@@ -31,4 +39,4 @@ arr = process.argv.slice(2)
 console.time("took")
 res = solve(arr)
 console.timeEnd("took")
-console.log("res")
+console.log(res)
