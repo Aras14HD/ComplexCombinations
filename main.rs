@@ -5,26 +5,22 @@ use std::time::Instant;
 
 #[memoize]
 fn solve(arr: Vec<u128>) -> u128 {
-    print!("Array:");
+    /*print!("Array:");
     for i in &arr {
         print!(" {i}");
     }
-    println!("");
+    println!("");*/
     if arr == vec![1] {
-        for i in &arr {
+        /*for i in &arr {
             print!("{i} ");
         }
-        println!("Got: 1");
+        println!("Got: 1");*/
         return 1;
     }
-    println!("Calculating!");
+    //println!("Calculating!");
     let mut out: u128 = 0;
     let mut i = arr.len();
     while i > 0 {
-        if i < arr.len() - 1 && arr[i] < arr[i + 1] {
-            println!("Wrong input Vec!");
-            return 0;
-        }
         i -= 1;
         if arr[i] != 0 {
             let mut copy = arr.clone();
@@ -42,12 +38,15 @@ fn solve(arr: Vec<u128>) -> u128 {
                 let res = solve(copy);
                 out += diff * res;
             }
+        } else {
+            println!("Wrong Format!");
+            return 0;
         }
     }
-    for i in &arr {
+    /*for i in &arr {
         print!("{i} ");
     }
-    println!("Got: {out}");
+    println!("Got: {out}");*/
     return out;
 }
 

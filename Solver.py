@@ -1,5 +1,6 @@
 from memoization import cached
 import time
+import sys
 
 @cached
 def solve(arr):
@@ -20,9 +21,14 @@ def solve(arr):
                 diff = arr[i] - arr[i+1]
             if diff != 0:
                 out += diff*solve(copy)
+        else:
+            print("Wrong Format")
+            return 0
     return out
 
-arr = [9, 9, 9, 9]
+arr = []
+for arg in sys.argv[1:]:
+    arr.append(int(arg))
 before = time.time()
 res = solve(arr)
 after = time.time()
