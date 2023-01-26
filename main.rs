@@ -1,37 +1,36 @@
+use memoize::memoize;
 use std::collections::HashMap;
+use std::env;
 use std::time::Instant;
 
-fn solve(arr: Vec<u128>, map: &mut HashMap<Vec<u128>, u128>) -> (u128, HashMap<Vec<u128>, u128>) {
+#[memoize]
+fn solve(arr: Vec<u128>) -> u128 {
     print!("Array:");
     for i in &arr {
         print!(" {i}");
     }
     println!("");
-    if let Some(&cached) = map.get(&arr) {
-        println!("Cached!");
-        for i in &arr {
-            print!("{i} ")
-        }
-        println!("Got: {cached}");
-        return (cached, map.clone());
-    }
     if arr == vec![1] {
         for i in &arr {
             print!("{i} ");
         }
         println!("Got: 1");
-        return (1, map.clone());
+        return 1;
     }
-    //println!("Calculating!");
+    println!("Calculating!");
     let mut out: u128 = 0;
     let mut i = arr.len();
     while i > 0 {
+        if i < arr.len() - 1 && arr[i] < arr[i + 1] {
+            println!("Wrong input Vec!");
+            return 0;
+        }
         i -= 1;
         if arr[i] != 0 {
             let mut copy = arr.clone();
             let diff: u128;
             copy[i] -= 1;
-            if i == copy.len() - 1 && copy[i] == 0 {
+            while copy[copy.len() - 1] == 0 {
                 copy.truncate(copy.len() - 1);
             }
             if i == arr.len() - 1 {
@@ -40,8 +39,7 @@ fn solve(arr: Vec<u128>, map: &mut HashMap<Vec<u128>, u128>) -> (u128, HashMap<V
                 diff = arr[i] - arr[i + 1]
             }
             if diff != 0 {
-                let (res, nmap) = solve(copy, map);
-                map.extend(nmap);
+                let res = solve(copy);
                 out += diff * res;
             }
         }
@@ -49,16 +47,21 @@ fn solve(arr: Vec<u128>, map: &mut HashMap<Vec<u128>, u128>) -> (u128, HashMap<V
     for i in &arr {
         print!("{i} ");
     }
-    map.insert(arr, out);
     println!("Got: {out}");
-    return (out, map.clone());
+    return out;
 }
 
 fn main() {
+    let args: Vec<String> = env::args().collect();
+    let mut arr: Vec<u128> = Vec::new();
+    for arg in args {
+        if let Ok(n) = u128::from_str_radix(arg.as_str(), 10) {
+            arr.push(n);
+        }
+    }
     let before = Instant::now();
     let map: &mut HashMap<Vec<u128>, u128> = &mut HashMap::new();
-    let (res, nmap) = solve(vec![9, 9, 9, 9, 9, 9], map);
+    let res = solve(arr);
     println!("Took {:.2?}", before.elapsed());
     println!("Result: {res}");
-    println!("Cache Size: {}", nmap.len());
 }
