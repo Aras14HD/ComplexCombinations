@@ -18,7 +18,7 @@ public class Solver {
         long res = s.solve(arr);
         double after = System.nanoTime();
         System.out.println("Took: " + (after - before) / 1000000 + "ms");
-        System.out.println(res);
+        System.out.println("Result: " + res);
     }
 
     public Solver() {
@@ -47,7 +47,7 @@ public class Solver {
                     copy.remove(i);
                 }
                 diff = i == arr.size() - 1 ? arr.get(i) : arr.get(i) - arr.get(i + 1);
-                //System.out.println(diff);
+                // System.out.println(diff);
                 if (diff > 0) {
                     out += diff * this.solve(copy);
                 }
