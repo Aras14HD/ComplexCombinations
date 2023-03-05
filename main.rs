@@ -1,6 +1,5 @@
 use memoize::memoize;
-use std::env;
-use std::time::Instant;
+use std::{env, time::Instant};
 
 #[memoize]
 fn solve(arr: Vec<u128>) -> u128 {
@@ -20,10 +19,10 @@ fn solve(arr: Vec<u128>) -> u128 {
     let mut out: u128 = 0;
     let mut i = arr.len();
     while i > 0 {
+        let diff: u128;
         i -= 1;
         if arr[i] != 0 {
             let mut copy = arr.clone();
-            let diff: u128;
             copy[i] -= 1;
             while copy[copy.len() - 1] == 0 {
                 copy.truncate(copy.len() - 1);
@@ -46,14 +45,14 @@ fn solve(arr: Vec<u128>) -> u128 {
         print!("{i} ");
     }
     println!("Got: {out}");*/
-    return out;
+    out
 }
 
 fn main() {
     let args: Vec<String> = env::args().collect();
     let mut arr: Vec<u128> = Vec::new();
     for arg in args {
-        if let Ok(n) = u128::from_str_radix(arg.as_str(), 10) {
+        if let Ok(n) = str::parse(arg.as_str()) {
             arr.push(n);
         }
     }
