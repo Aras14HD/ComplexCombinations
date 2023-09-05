@@ -1,5 +1,4 @@
 use memoize::memoize;
-use std::collections::HashMap;
 use std::env;
 use std::time::Instant;
 
@@ -59,7 +58,6 @@ fn main() {
         }
     }
     let before = Instant::now();
-    let map: &mut HashMap<Vec<u128>, u128> = &mut HashMap::new();
     let res = solve(arr);
     println!("Took {:.2?}", before.elapsed());
     println!("Result: {res}");
