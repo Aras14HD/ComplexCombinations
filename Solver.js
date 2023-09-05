@@ -36,7 +36,7 @@ let solve = arr => {
 
 
 arr = process.argv.slice(2)
-console.time("took")
+console.time("Took")
 res = solve(arr)
-console.timeEnd("took")
-console.log(res)
+console.timeEnd("Took")
+console.log("Result: " + res)

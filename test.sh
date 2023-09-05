@@ -1,5 +1,5 @@
 echo "  Testing Rust (9 9)"
-cargo build -r | /dev/null
+cargo build -r >&-
 ./target/release/ComplexCombinations 9 9
 echo "  With 9 9 9 9 9"
 ./target/release/ComplexCombinations 9 9 9 9 9
