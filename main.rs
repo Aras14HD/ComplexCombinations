@@ -2,50 +2,59 @@ use memoize::memoize;
 use std::{env, time::Instant};
 
 #[memoize]
-fn solve(arr: Vec<u128>) -> u128 {
-    /*print!("Array:");
-    for i in &arr {
-        print!(" {i}");
+fn solve<'a>(arr: Box<[u128]>) -> Result<u128, String> {
+    let arr = &*arr;
+    let arr_mut = unsafe { &mut *(arr as *const [u128] as *mut [u128]) };
+    // Safety: We now have arr as mutable, even though it shouldn't be, any change to it needs to be reverted!
+    // print!("Array:");
+    // for i in arr {
+    //     print!(" {i}");
+    // }
+    // println!("");
+    if *arr == [1] {
+        return Ok(1);
     }
-    println!("");*/
-    if arr == vec![1] {
-        /*for i in &arr {
-            print!("{i} ");
-        }
-        println!("Got: 1");*/
-        return 1;
-    }
-    //println!("Calculating!");
+    // println!("Calculating!");
     let mut out: u128 = 0;
-    let mut i = arr.len();
-    while i > 0 {
+    for (i, v) in arr.iter().enumerate() {
         let diff: u128;
-        i -= 1;
-        if arr[i] != 0 {
-            let mut copy = arr.clone();
-            copy[i] -= 1;
-            while copy[copy.len() - 1] == 0 {
-                copy.truncate(copy.len() - 1);
-            }
+        if v != &0 {
             if i == arr.len() - 1 {
                 diff = arr[i];
             } else {
+                if arr[i + 1] > arr[i] {
+                    return Err(format!(
+                        "Invalid format! Following can't be bigger than pervious. Input: {:?}",
+                        arr
+                    ));
+                }
                 diff = arr[i] - arr[i + 1]
             }
+            arr_mut[i] -= 1;
+            let (len, _) = arr
+                .iter()
+                .enumerate()
+                .find(|x| x.1 == &0)
+                .unwrap_or((arr.len(), &0));
+            // for i in arr {
+            //     print!("{i} ");
+            // }
+            // println!();
+            // println!("Length: {len}");
             if diff != 0 {
-                let res = solve(copy);
+                let res = solve(arr[..len].into())?;
                 out += diff * res;
             }
+            arr_mut[i] += 1;
         } else {
-            println!("Wrong Format!");
-            return 0;
+            return Err(format!("Invalid format! Can't contain 0. Input: {:?}", arr));
         }
     }
-    /*for i in &arr {
-        print!("{i} ");
-    }
-    println!("Got: {out}");*/
-    out
+    // for i in arr {
+    //     print!("{i} ");
+    // }
+    // println!("Got: {out}");
+    Ok(out)
 }
 
 fn main() {
@@ -57,7 +66,7 @@ fn main() {
         }
     }
     let before = Instant::now();
-    let res = solve(arr);
+    let res = solve(arr.into()).unwrap();
     println!("Took: {:.2?}", before.elapsed());
     println!("Result: {res}");
 }
