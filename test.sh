@@ -22,3 +22,8 @@ python Solver.py 9 9
 echo "  With 9 9 9 9 9"
 python Solver.py 9 9 9 9 9
 deactivate
+
+echo "  Testing Go (9 9)"
+./Solver 9 9
+echo "  With 9 9 9 9 9"
+./Solver 9 9 9 9 9
