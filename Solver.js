@@ -1,10 +1,10 @@
-let cache = {}
+let cache = new Map()
 let solve = arr => {
   //console.log(arr)
   let key = JSON.stringify(arr);
-  if (cache[key]) {
+  if (cache.has(key)) {
     //console.log("Cached!")
-    return cache[key]
+    return cache.get(key)
   }
   if (arr.length == 1 && arr[0] == 1) {
     return 1;
@@ -30,7 +30,7 @@ let solve = arr => {
       return 0
     }
   }
-  cache[key] = out
+  cache.set(key, out)
   return out
 }
 
