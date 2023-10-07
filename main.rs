@@ -17,10 +17,9 @@ fn solve<'a>(arr: Box<[u128]>) -> Result<u128, String> {
     // println!("Calculating!");
     let mut out: u128 = 0;
     for (i, v) in arr.iter().enumerate() {
-        let diff: u128;
         if v != &0 {
-            if i == arr.len() - 1 {
-                diff = arr[i];
+            let diff = if i == arr.len() - 1 {
+                arr[i]
             } else {
                 if arr[i + 1] > arr[i] {
                     return Err(format!(
@@ -28,8 +27,11 @@ fn solve<'a>(arr: Box<[u128]>) -> Result<u128, String> {
                         arr
                     ));
                 }
-                diff = arr[i] - arr[i + 1]
-            }
+                if arr[i + 1] == arr[i] {
+                    continue;
+                }
+                arr[i] - arr[i + 1]
+            };
             arr_mut[i] -= 1;
             let (len, _) = arr
                 .iter()
@@ -41,10 +43,8 @@ fn solve<'a>(arr: Box<[u128]>) -> Result<u128, String> {
             // }
             // println!();
             // println!("Length: {len}");
-            if diff != 0 {
-                let res = solve(arr[..len].into())?;
-                out += diff * res;
-            }
+            let res = solve(arr[..len].into())?;
+            out += diff * res;
             arr_mut[i] += 1;
         } else {
             return Err(format!("Invalid format! Can't contain 0. Input: {:?}", arr));
