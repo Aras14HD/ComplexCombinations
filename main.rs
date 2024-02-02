@@ -42,7 +42,6 @@ fn solve(mut arr: Box<[u128]>) -> Result<u128, String> {
             // println!();
             // println!("Length: {len}");
             let res = solve(arr[..len].into())?;
-            println!("{arr:?}: {diff} * {res}");
             out += diff * res;
             arr[i] += 1;
         } else {
