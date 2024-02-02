@@ -2,9 +2,7 @@ use memoize::memoize;
 use std::{env, time::Instant};
 
 #[memoize]
-fn solve<'a>(arr: Box<[u128]>) -> Result<u128, String> {
-    let arr = &*arr;
-    let arr_mut = unsafe { &mut *(arr as *const [u128] as *mut [u128]) };
+fn solve(mut arr: Box<[u128]>) -> Result<u128, String> {
     // Safety: We now have arr as mutable, even though it shouldn't be, any change to it needs to be reverted!
     // print!("Array:");
     // for i in arr {
@@ -16,8 +14,8 @@ fn solve<'a>(arr: Box<[u128]>) -> Result<u128, String> {
     }
     // println!("Calculating!");
     let mut out: u128 = 0;
-    for (i, v) in arr.iter().enumerate() {
-        if v != &0 {
+    for i in 0..arr.len() {
+        if arr[i] != 0 {
             let diff = if i == arr.len() - 1 {
                 arr[i]
             } else {
@@ -32,7 +30,7 @@ fn solve<'a>(arr: Box<[u128]>) -> Result<u128, String> {
                 }
                 arr[i] - arr[i + 1]
             };
-            arr_mut[i] -= 1;
+            arr[i] -= 1;
             let (len, _) = arr
                 .iter()
                 .enumerate()
@@ -44,8 +42,9 @@ fn solve<'a>(arr: Box<[u128]>) -> Result<u128, String> {
             // println!();
             // println!("Length: {len}");
             let res = solve(arr[..len].into())?;
+            println!("{arr:?}: {diff} * {res}");
             out += diff * res;
-            arr_mut[i] += 1;
+            arr[i] += 1;
         } else {
             return Err(format!("Invalid format! Can't contain 0. Input: {:?}", arr));
         }
